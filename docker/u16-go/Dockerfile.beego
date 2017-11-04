@@ -1,0 +1,6 @@
+## docker build -f Dockerfile.beego --tag=u16-beego --rm=true .
+FROM u16-go:latest
+MAINTAINER shushengsky <shushengsky@163.com>
+
+RUN go get -u -v github.com/astaxie/beego
+RUN go get -u -v github.com/beego/bee

@@ -1,0 +1,22 @@
+## docker build -f Dockerfile.etcd --tag=u16-etcd --rm=true .
+FROM u16-go
+MAINTAINER shushengsky <shushengsky@163.com>
+
+RUN mkdir -p /go/src/github.com/coreos/etcd && \
+	git config --global http.sslVerify false && \
+	git clone -v --depth=1 --branch v3.2.7 \
+		https://github.com/coreos/etcd.git /go/src/github.com/coreos/etcd
+
+RUN cd /go/src/github.com/coreos/etcd && \
+    BINDIR=/usr/local/bin bash -x ./build && \
+    mkdir -p /etcd/
+
+WORKDIR /etcd/
+VOLUME /etcd/data
+
+EXPOSE 2379 2380
+ENTRYPOINT ["etcd", \
+    "--data-dir=/etcd/data/data", \
+    "--wal-dir=/etcd/data/wal", \
+    "-listen-peer-urls=http://0.0.0.0:2380", \
+    "--listen-client-urls=http://0.0.0.0:2379" ]

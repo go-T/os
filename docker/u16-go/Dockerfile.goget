@@ -1,0 +1,40 @@
+## docker build --tag=centos-goget --rm=true .
+# FROM centos:7.2.1511
+## docker build  -f Dockerfile.goget --tag=u16-goget --rm=true .
+## docker run --rm -it -v $PWD:/go/bin u16-goget github.com/kardianos/govendor
+FROM ubuntu:16.04
+MAINTAINER shushengsky <shushengsky@163.com>
+
+ENV LANG en_US.UTF-8
+RUN sed -i 's/archive.ubuntu.com/cn.archive.ubuntu.com/g' /etc/apt/sources.list && \
+	apt-get update -y && \
+	apt-get install -y apt-utils language-pack-en tzdata && \
+	rm -f /etc/localtime && \
+	echo "Asia/Shanghai" > /etc/timezone && \
+	dpkg-reconfigure -f noninteractive tzdata && \
+	apt-get install --no-install-recommends -y \
+	    vim tar unzip wget curl bzip2 git-core libz-dev \
+	    make pkg-config build-essential && \
+	 rm -vrf /var/lib/apt/lists/* && \
+	git config --global http.sslVerify false && \
+	gcc -v 
+
+ENV GOLANG_VERSION 1.8.3
+ENV GOROOT /usr/local/go
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
+
+RUN curl -s -o /tmp/go.tgz \
+			https://storage.googleapis.com/golang/go${GOLANG_VERSION}.linux-amd64.tar.gz && \
+	tar -C /usr/local -xzf /tmp/go.tgz && \
+		tar -C /usr -xzf /tmp/go.tgz && \
+	rm /tmp/go.tgz && \
+		cd /usr/local/go/src && \
+		GOROOT_BOOTSTRAP=/usr/go ./make.bash && \
+		rm -rf /usr/go && \
+	mkdir -p $GOPATH/src && \
+	go get -v github.com/kardianos/govendor && \
+	mv /go/bin/govendor $GOROOT/bin && \
+	rm -rf $GOPATH/src
+
+ENTRYPOINT ["go", "get", "-v"]
