@@ -1,0 +1,53 @@
+[push]
+    default = simple
+[pull]
+    default = simple
+[color]
+    diff = auto
+    status = true
+    branch = auto
+    interactive = auto
+    ui = auto
+    log = true
+[diff]
+    tool = bc3
+[difftool]
+    prompt = false
+[merge]
+    tool = bc3
+[mergetool]
+    prompt = false
+[status]
+    submodulesummary = -1
+[format]
+    numbered = auto
+[alias]
+    co = checkout
+    ck = checkout --track -b
+    ci = commit
+    st = status
+    pl = pull
+    ps = push
+    l  = log --stat
+    ll = log --pretty=oneline --abbrev-commit --graph --decorate
+    cp = cherry-pick
+    ca = commit -a
+    br = branch
+    d = diff
+    m = merge
+    dt = difftool
+    mt = mergetool
+[difftool "sourcetree"]
+	cmd = /usr/local/bin/bcomp $LOCAL $REMOTE
+	path = 
+[mergetool "sourcetree"]
+	cmd = /usr/local/bin/bcomp $LOCAL $REMOTE
+	trustExitCode = true
+[http]
+	sslVerify = false
+	postBuffer = 1048576000
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	required = true
+	process = git-lfs filter-process
