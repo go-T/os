@@ -1,0 +1,8 @@
+version: "2"
+services:
+  etcd:
+    build: .
+    image: etcd-standalone:latest
+    volumes:
+    - ./data/etcd/:/data/
+    network_mode: host
