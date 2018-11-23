@@ -1,0 +1,22 @@
+# docker-compose -f mysql.yml up -d
+# docker-compose -f mysql.yml exec mysql mysql -hlocalhost -uuser -ppass db
+version: '2'
+services:
+  mysql:
+    image: mariadb:10.3
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pass
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - 3307:3306
+    command:
+      - mysqld
+      - --character-set-server=utf8
+      - --collation-server=utf8_unicode_ci
+      - --init-connect=SET NAMES UTF8;
+      - --skip-character-set-client-handshake
+      - --skip-name-resolve
