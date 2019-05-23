@@ -1,15 +1,17 @@
 cd %~dp0
 
-set MSYS_DRV=D:
+:: -- config ---
+set MSYS_DRV=C:
 set MSYS_USR=admin
-
+set Z7_URL=https://github.com/go-t/os/raw/master/win
 set MSYS_SRC=https://mirrors.tuna.tsinghua.edu.cn/msys2
-set MSYS_URL=https://mirrors.tuna.tsinghua.edu.cn/msys2/distrib/msys2-x86_64-latest.tar.xz
-set Z7_URL=https://github.com/go-t/os/raw/master/win/7z.exe
+
+set MSYS_URL=%MSYS_SRC%/distrib/msys2-x86_64-latest.tar.xz
 set MSYS_DIR=%MSYS_DRV%\msys64
 set PATH=%MSYS_DIR%\usr\bin;%~dp0;%PATH%
 
-call :download 7z.exe %Z7_URL%
+call :download 7z.exe %Z7_URL%/7z.exe
+call :download 7z.dll %Z7_URL%/7z.dll
 call :download msys2-x86_64-latest.tar.xz %MSYS_URL%
 call :install
 call :mount-fs
